@@ -69,7 +69,7 @@ class _BodyState extends State<Body> {
                 ).show(context);
               },
             ),
-            Padding(
+            /*    Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: TextButton(
                 style: TextButton.styleFrom(
@@ -103,7 +103,7 @@ class _BodyState extends State<Body> {
                   ],
                 ),
               ),
-            )
+            )*/
           ],
         ),
       ),

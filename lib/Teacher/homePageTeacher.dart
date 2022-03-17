@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:get_storage/get_storage.dart';
 
 import '../profile/profile_screen.dart';
 import 'homePageContentTeacher.dart';
@@ -39,7 +38,6 @@ class _homePageTeacherState extends State<homePageTeacher> {
     getMessage();
   }
 
-  var mode = GetStorage().read("mode");
   var currentIndex = 0;
   List pages = [homePageContentTeacher(), ProfileScreen()];
   List<BottomNavyBarItem> items = [
@@ -73,7 +71,7 @@ class _homePageTeacherState extends State<homePageTeacher> {
 
   Container buildNavigationBar() {
     return Container(
-      color: mode == true ? Colors.black.withOpacity(0.8) : Color(0xffe3eaef),
+      color: Color(0xffe3eaef),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -82,10 +80,7 @@ class _homePageTeacherState extends State<homePageTeacher> {
           child: BottomNavyBar(
             onItemSelected: (int value) {
               setState(() {
-                mode = GetStorage().read("mode");
                 currentIndex = value;
-
-                print(mode);
               });
             },
             selectedIndex: currentIndex,

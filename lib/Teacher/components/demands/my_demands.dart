@@ -254,7 +254,7 @@ class _InProgressState extends State<My_demands> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: mode == true ? null : Color(0xffe3eaef),
+      backgroundColor: Color(0xffe3eaef),
       body: StreamBuilder<QuerySnapshot>(
         stream: dataSnapshot
             .collection("demands")
