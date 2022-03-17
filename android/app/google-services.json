@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "58555771633",
+    "project_id": "tirage-isg",
+    "storage_bucket": "tirage-isg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:58555771633:android:0886133674d82f008d1750",
+        "android_client_info": {
+          "package_name": "com.example.tirage_isg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "58555771633-38cvebd0ff0km112b760kaa2mh8u2c04.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDsx4qdIdyfKCetdIr4kjpF12PSmYewJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "58555771633-38cvebd0ff0km112b760kaa2mh8u2c04.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

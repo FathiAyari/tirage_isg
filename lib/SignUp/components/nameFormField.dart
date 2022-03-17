@@ -1,19 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class FormFieldPassword extends StatelessWidget {
-  const FormFieldPassword({
+class nameFormField extends StatelessWidget {
+  const nameFormField({
     required this.size,
     required this.controller,
     required this.preixIcon,
-    required this.suffixIcon,
-    required this.obscuretext,
+    required this.hintText,
   });
 
   final Size size;
-  final bool obscuretext;
   final IconData preixIcon;
-  final IconButton suffixIcon;
+  final String hintText;
   final TextEditingController controller;
 
   @override
@@ -32,13 +30,11 @@ class FormFieldPassword extends StatelessWidget {
               return null;
           },
           controller: controller,
-          obscureText: obscuretext,
           decoration: InputDecoration(
-              hintText: "Mot de passe",
-              hintStyle: TextStyle(
+              hintText: "$hintText",
+              hintStyle: const TextStyle(
                 color: Colors.blueAccent,
               ),
-              suffixIcon: (suffixIcon),
               prefixIcon: Icon(
                 preixIcon,
                 color: Colors.blueAccent,

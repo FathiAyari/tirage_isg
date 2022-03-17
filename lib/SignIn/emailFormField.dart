@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 
 class emailFormField extends StatelessWidget {
   const emailFormField({
-    Key key,
-    @required this.size,
-    @required this.controller,
-    this.prefixIcon,
-  }) : super(key: key);
+    required this.size,
+    required this.controller,
+    required this.prefixIcon,
+  });
 
   final Size size;
 
@@ -23,7 +22,7 @@ class emailFormField extends StatelessWidget {
         height: size.height * 0.1,
         child: TextFormField(
           validator: (value) {
-            if (value.isEmpty) {
+            if (value!.isEmpty) {
               // validation function
 
               return ' cet champ est obligatoire ';

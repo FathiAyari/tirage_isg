@@ -7,7 +7,9 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:lottie/lottie.dart';
+import 'package:tirage_isg/Responsable/homePagResponsable.dart';
 import 'package:tirage_isg/SignIn/sign_in.dart';
+import 'package:tirage_isg/Teacher/homePageTeacher.dart';
 import 'package:tirage_isg/onboardingPage/Onboarding.dart';
 
 class SplasScreen extends StatefulWidget {
@@ -25,9 +27,16 @@ class _SplasScreenState extends State<SplasScreen> {
     var type_auth = GetStorage().read("type_auth");
     var resultSeen = GetStorage().read("seen");
     Timer(
-      Duration(seconds: 4),
-      () => Get.to(() => resultSeen == 1 ? SignIn() : Onboarding()),
-    );
+        Duration(seconds: 4),
+        () => Get.to(
+              resultSeen == 1
+                  ? (auth == 1
+                      ? (type_auth == 1
+                          ? homePageResponsable()
+                          : homePageTeacher())
+                      : SignIn())
+                  : Onboarding(),
+            ));
   }
 
   @override
@@ -67,8 +76,8 @@ class _SplasScreenState extends State<SplasScreen> {
                 SizedBox(
                   height: size.height * 0.06,
                 ),
-                Lottie.network(
-                  "https://assets6.lottiefiles.com/private_files/lf30_aw7fmqh1.json",
+                Lottie.asset(
+                  "assets/images/loading.json",
                   height: size.height * 0.2,
                 )
               ],

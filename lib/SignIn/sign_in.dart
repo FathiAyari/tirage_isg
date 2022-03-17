@@ -1,15 +1,24 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/utils.dart';
 import 'package:tirage_isg/ForgotPassword/ForgotPassword.dart';
+import 'package:tirage_isg/Responsable/homePagResponsable.dart';
+import 'package:tirage_isg/Services/AuthServices.dart';
+import 'package:tirage_isg/Teacher/homePageTeacher.dart';
 
+import '../Models/Users.dart';
+import '../SignUp/create_account.dart';
+import '../onboardingPage/remember_controller.dart';
 import 'ActionButton.dart';
 import 'DividerBox.dart';
 import 'FormFieldPassword.dart';
-import 'components/alert_choose_type.dart';
+import 'components/alert_failed.dart';
 import 'emailFormField.dart';
 
 class SignIn extends StatefulWidget {
@@ -44,40 +53,45 @@ class _LoginState extends State<SignIn> {
 
   bool hasConnection = false;
   bool loading = false;
+  late String token;
   bool obscureText = true;
+  final controller = RememberController();
   Widget SuffixPassword = Icon(Icons.visibility);
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  String verifyInput() {
-    String result = "";
-
-    if (emailController.text.isEmpty || !validateEmail(emailController.text)) {
-      result += "Veuillez verifier l'email";
-    } else if (passwordController.text.isEmpty) {
-      result += "Veuillez verifier le mot de passe ";
-    }
-    return result;
+  Future<bool> avoidReturnButton() async {
+    // async pour l'ouverture de thread
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            content: Text(" êtes-vous sûr de sortir ?"),
+            actions: [Negative(context), Positive()],
+          );
+        });
+    return true;
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseMessaging.instance.getToken().then((userToken) {
+      setState(() {
+        token = userToken!;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return WillPopScope(
-      onWillPop: () {
-        return showDialog(
-            context: context,
-            builder: (context) {
-              return CupertinoAlertDialog(
-                content: Text(" êtes-vous sûr de sortir ?"),
-                actions: [Negative(context), Positive()],
-              );
-            });
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: WillPopScope(
+        onWillPop: avoidReturnButton,
+        child: SafeArea(
           child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -91,7 +105,6 @@ class _LoginState extends State<SignIn> {
             ),
             child: Column(
               children: [
-                Spacer(),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -144,13 +157,53 @@ class _LoginState extends State<SignIn> {
                   ),
                 ),
                 !loading
-                    ? BuildLoginButton(size, "Connecter", () {
-                        if (_formKey.currentState.validate()) {
+                    ? BuildLoginButton(size, "Connecter", () async {
+                        if (_formKey.currentState!.validate()) {
                           setState(() {
                             loading = true;
                           });
+                          Future check = AuthServices().signIn(
+                              emailController.text, passwordController.text);
+
+                          check.then((value) async {
+                            if (value) {
+                              final FirebaseAuth auth =
+                                  await FirebaseAuth.instance;
+                              final User? user = await auth.currentUser;
+                              final uid = user!.uid;
+                              var UserData = await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(uid)
+                                  .get();
+
+                              await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(uid)
+                                  .update({"token": token});
+                              if (UserData["role"] == "Responsable de tirage") {
+                                await controller.RememberResponsable(
+                                    Cusers.fromJson(UserData.data()));
+                                Get.to(homePageResponsable());
+                              } else {
+                                await controller.RememberTeacher(
+                                    Cusers.fromJson(UserData.data()));
+                                Get.to(homePageTeacher());
+                              }
+                            } else {
+                              alertTask(
+                                lottieFile: "assets/images/error.json",
+                                action: "Ressayer",
+                                message: "pas de compte avec ces cordonnées ",
+                                press: () {
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                  Navigator.pop(context);
+                                },
+                              ).show(context);
+                            }
+                          });
                         }
-                        ;
                       })
                     : CircularProgressIndicator.adaptive(),
                 SizedBox(
@@ -171,7 +224,7 @@ class _LoginState extends State<SignIn> {
                         ),
                         InkWell(
                           onTap: () {
-                            alertChooseType().show(context);
+                            Get.to(() => CreateAccount());
                           },
                           child: const Text(
                             " Créer un compte ",
@@ -193,11 +246,4 @@ class _LoginState extends State<SignIn> {
       ),
     );
   }
-}
-
-bool validateEmail(String value) {
-  Pattern pattern =
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  RegExp regex = RegExp(pattern);
-  return (!regex.hasMatch(value)) ? false : true;
 }

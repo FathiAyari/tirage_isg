@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 
 class DividerBox extends StatelessWidget {
   const DividerBox({
-    Key key,
-    @required this.size, this.height,
-  }) : super(key: key);
+    required this.size,
+    required this.height,
+  });
 
   final Size size;
   final double height;

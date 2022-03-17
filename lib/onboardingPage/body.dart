@@ -19,19 +19,19 @@ class _BodyState extends State<Body> {
       title: "Bienvenue ",
       desc:
           ' Vous êtes un(e) enseignant(e) ou bien responsable de tirage ? vous etes  au bon endroit .',
-      image: 'https://assets9.lottiefiles.com/private_files/lf30_wbszjekz.json',
+      image: 'assets/images/welcome.json',
     ),
     OnbaordingContent(
       title:
           "êtes-vous fatigué d'amener les documents chaque jour au service de tirage  ?",
       desc: 'Tirage ISG est la meilleur solution  pour vous ',
-      image: 'https://assets9.lottiefiles.com/packages/lf20_lzhwcgzg.json',
+      image: 'assets/images/question.json',
     ),
     OnbaordingContent(
       title: "Avec Tirage ISG",
       desc:
           'A partir de maintenant deposer vos documents au service de tirage par un seul clic ',
-      image: 'https://assets3.lottiefiles.com/packages/lf20_QOGjZb.json',
+      image: 'assets/images/done.json',
     ),
   ];
   PageController _controller = PageController();
@@ -62,7 +62,9 @@ class _BodyState extends State<Body> {
                   return AnimatedContainer(
                     duration: Duration(milliseconds: 200),
                     height: size.height * 0.01,
-                    width: (index == currentPage) ? 25 : 10,
+                    width: (index == currentPage)
+                        ? 25
+                        : 10, // condition au lieu de if else
                     margin: EdgeInsets.symmetric(horizontal: 5, vertical: 30),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
@@ -96,30 +98,28 @@ class _BodyState extends State<Body> {
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 10),
-                    child: InkWell(
-                      child: AnimatedContainer(
-                        duration: Duration(milliseconds: 200),
-                        height: 40,
-                        width: (currentPage == pages.length - 1) ? 150 : 120,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10))),
-                          child: (currentPage == pages.length - 1)
-                              ? Text("Commencer")
-                              : Text("Suivant"),
-                          onPressed: (currentPage == pages.length - 1)
-                              ? () async {
-                                  OnBoardingController.check();
-                                  Get.to(() => SignIn());
-                                }
-                              : () async {
-                                  OnBoardingController.check();
-                                  _controller.nextPage(
-                                      duration: Duration(milliseconds: 300),
-                                      curve: Curves.easeInOutQuint);
-                                },
-                        ),
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 200),
+                      height: 40,
+                      width: (currentPage == pages.length - 1) ? 150 : 120,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        child: (currentPage == pages.length - 1)
+                            ? Text("Commencer")
+                            : Text("Suivant"),
+                        onPressed: (currentPage == pages.length - 1)
+                            ? () {
+                                OnBoardingController.check();
+                                Get.to(() => SignIn());
+                              }
+                            : () {
+                                OnBoardingController.check();
+                                _controller.nextPage(
+                                    duration: Duration(milliseconds: 300),
+                                    curve: Curves.easeInOutQuint);
+                              },
                       ),
                     ),
                   ),
@@ -138,11 +138,10 @@ class OnbaordingContent extends StatelessWidget {
   final String image;
   final String desc;
   const OnbaordingContent({
-    Key key,
-    this.title,
-    this.image,
-    this.desc,
-  }) : super(key: key);
+    required this.title,
+    required this.image,
+    required this.desc,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +158,7 @@ class OnbaordingContent extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.orange, fontSize: size.height * 0.03)),
             ),
-            Lottie.network(
+            Lottie.asset(
               image,
               repeat: true,
               height: size.height * 0.4,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:tirage_isg/Services/AuthServices.dart';
 import 'package:tirage_isg/SignIn/ActionButton.dart';
 import 'package:tirage_isg/SignIn/emailFormField.dart';
 import 'package:tirage_isg/SignIn/sign_in.dart';
@@ -13,9 +14,10 @@ class ForgotPassword extends StatefulWidget {
 }
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  bool check;
+  bool check = false;
 
   TextEditingController emailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -69,27 +71,40 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ),
                 ),
               ),
-              emailFormField(
-                size: size,
-                controller: emailController,
-                prefixIcon: Icons.email_outlined,
+              Form(
+                key: _formKey,
+                child: emailFormField(
+                  size: size,
+                  controller: emailController,
+                  prefixIcon: Icons.email_outlined,
+                ),
               ),
               BuildLoginButton(size, "Recuperer votre mot de passe", () async {
-                Get.rawSnackbar(
-                  titleText: Text(
-                    "Tirage ISG",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  messageText: Text(
-                    "Consultez votre courrier électronique",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: Colors.green.withOpacity(0.5),
-                  borderRadius: 12,
-                  icon: Icon(Icons.done_all, color: Colors.white),
-                  margin: EdgeInsets.all(7),
-                  snackPosition: SnackPosition.BOTTOM,
-                );
+                if (_formKey.currentState!.validate()) {
+                  AuthServices().resetPassword("fljsm@dj.cm");
+                  Future.delayed(const Duration(seconds: 1), () {
+                    Get.to(SignIn(),
+                        duration: Duration(
+                            seconds:
+                                1), //duration of transitions, default 1 sec
+                        transition: Transition.leftToRight);
+                  });
+                  Get.rawSnackbar(
+                    titleText: Text(
+                      "Tirage ISG",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    messageText: Text(
+                      "Consultez votre courrier électronique",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.green.withOpacity(0.5),
+                    borderRadius: 12,
+                    icon: Icon(Icons.done_all, color: Colors.white),
+                    margin: EdgeInsets.all(7),
+                    snackPosition: SnackPosition.BOTTOM,
+                  );
+                }
               }),
             ],
           ),

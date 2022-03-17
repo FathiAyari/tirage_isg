@@ -2,13 +2,20 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:tirage_isg/onboardingPage/remember_controller.dart';
 
-class alertFailed extends StatelessWidget {
+class alertTask extends StatelessWidget {
   final String message;
-  final Function press;
+  final String lottieFile;
+  final String action;
+  final void Function() press;
 
-  alertFailed({this.message, this.press});
+  alertTask(
+      {required this.message,
+      required this.press,
+      required this.action,
+      required this.lottieFile});
   final controller = RememberController();
   show(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -26,24 +33,20 @@ class alertFailed extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 20),
                     child: Container(
-                      height: 150,
+                      height: 200,
                       width: size.width * 2,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          const SizedBox(
-                            height: 20,
+                          Lottie.asset(
+                            lottieFile,
+                            repeat: false,
+                            height: size.height * 0.1,
                           ),
-                          const Text(
-                            "pas de compte avec ces cordonnées ",
+                          Text(
+                            "${message}",
                             textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const SizedBox(
-                            height: 10,
                           ),
                           ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -53,7 +56,7 @@ class alertFailed extends StatelessWidget {
                                 padding: EdgeInsets.all(15),
                               ),
                               onPressed: press,
-                              child: Text("Ressayer")),
+                              child: Text("${action}")),
                         ],
                       ),
                     ),
