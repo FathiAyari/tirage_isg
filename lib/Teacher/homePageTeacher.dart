@@ -60,18 +60,14 @@ class _homePageTeacherState extends State<homePageTeacher> {
     return SafeArea(
       child: Scaffold(
         body: pages[currentIndex],
-        bottomNavigationBar: Container(
-            decoration: BoxDecoration(
-              color: Color(0xffe3eaef),
-            ),
-            child: buildNavigationBar()),
+        bottomNavigationBar:
+            Container(decoration: BoxDecoration(), child: buildNavigationBar()),
       ),
     );
   }
 
   Container buildNavigationBar() {
     return Container(
-      color: Color(0xffe3eaef),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(

@@ -34,7 +34,7 @@ class _PendingdemandsState extends State<Pendingdemands> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Color(0xffe3eaef),
+/*      backgroundColor: Color(0xffe3eaef),*/
       body: StreamBuilder<QuerySnapshot>(
         stream: dataSnapshot
             .collection("demands")
