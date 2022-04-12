@@ -55,7 +55,6 @@ class _PendingdemandsState extends State<Pendingdemands> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getMessage();
   }
 
   @override

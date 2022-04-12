@@ -1,9 +1,8 @@
+import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:tirage_isg/profile/components/profile_menu.dart';
 
-import '../../util/theme/theme_controller.dart';
 import 'alertLogOut.dart';
 
 class Body extends StatefulWidget {
@@ -22,34 +21,60 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 20),
-        child: Column(
+      child: Scaffold(
+        backgroundColor: Color(0xffe3eaef),
+        body: Column(
           children: [
-            CircleAvatar(
-              radius: 70,
-              backgroundImage: NetworkImage("${user['url']}"),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+            Container(
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                clipBehavior: Clip.none,
                 children: [
-                  Text(
-                    "${user["name"]} ",
-                    style: TextStyle(
-                        color: Colors.blueAccent, fontSize: size.height * 0.03),
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20)),
+                    child: Container(
+                        width: double.infinity,
+                        child: Image.asset(
+                          "assets/images/logo.jpg",
+                          fit: BoxFit.fill,
+                        )),
                   ),
-                  SizedBox(
-                    width: size.width * 0.03,
-                  ),
-                  Text(
-                    "${user["lastname"]} ",
-                    style: TextStyle(
-                        color: Colors.blueAccent, fontSize: size.height * 0.03),
+                  Positioned(
+                    bottom: -75,
+                    child: CircleAvatar(
+                      radius: 75,
+                      backgroundColor: Colors.orangeAccent,
+                      child: CircleAvatar(
+                        radius: 70,
+                        backgroundImage: NetworkImage("${user['url']}"),
+                      ),
+                    ),
                   ),
                 ],
               ),
+            ),
+            SizedBox(
+              height: size.height * 0.12,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  StringUtils.capitalize(" ${user['name']}"),
+                  style: TextStyle(
+                      color: Colors.blueAccent, fontSize: size.height * 0.03),
+                ),
+                SizedBox(
+                  width: size.width * 0.03,
+                ),
+                Text(
+                  StringUtils.capitalize(" ${user['lastname']}"),
+                  style: TextStyle(
+                      color: Colors.blueAccent, fontSize: size.height * 0.03),
+                ),
+              ],
             ),
             ProfileMenu(
               text: "Aide",
@@ -67,7 +92,7 @@ class _BodyState extends State<Body> {
                 ).show(context);
               },
             ),
-            GetBuilder<ThemeController>(
+            /*  GetBuilder<ThemeController>(
                 init: ThemeController(),
                 builder: (controller) {
                   return Padding(
@@ -97,7 +122,6 @@ class _BodyState extends State<Body> {
                                     AssetImage("assets/images/night.png"),
                                 value: controller.isDark,
                                 onChanged: (value) {
-                                  print(controller.isDark);
                                   controller.updateTheme(value);
                                 }),
                           )
@@ -105,7 +129,7 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                   );
-                })
+                })*/
           ],
         ),
       ),

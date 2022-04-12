@@ -15,16 +15,17 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   bool check = false;
-
+// creation de controller pour un champ de text
   TextEditingController emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
         child: Container(
-          width: double.infinity,
+          width: double.infinity, // taille de l'ecran width
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topRight,
@@ -45,7 +46,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           onPressed: () {
                             Get.to(() => SignIn());
                           },
-                          icon: Icon(Icons.arrow_back_ios)),
+                          icon: Icon(Icons
+                              .arrow_back_ios)), // espace vide entre deux widgets
                       SizedBox(
                         width: size.width * 0.15,
                       ),
@@ -72,40 +74,65 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
               ),
               Form(
-                key: _formKey,
+                key: _formKey, // clé de formulaire
                 child: emailFormField(
                   size: size,
                   controller: emailController,
                   prefixIcon: Icons.email_outlined,
                 ),
               ),
-              BuildLoginButton(size, "Recuperer votre mot de passe", () async {
-                if (_formKey.currentState!.validate()) {
-                  AuthServices().resetPassword("fljsm@dj.cm");
-                  Future.delayed(const Duration(seconds: 1), () {
-                    Get.to(SignIn(),
-                        duration: Duration(
-                            seconds:
-                                1), //duration of transitions, default 1 sec
-                        transition: Transition.leftToRight);
-                  });
-                  Get.rawSnackbar(
-                    titleText: Text(
-                      "Tirage ISG",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    messageText: Text(
-                      "Consultez votre courrier électronique",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    backgroundColor: Colors.green.withOpacity(0.5),
-                    borderRadius: 12,
-                    icon: Icon(Icons.done_all, color: Colors.white),
-                    margin: EdgeInsets.all(7),
-                    snackPosition: SnackPosition.BOTTOM,
-                  );
-                }
-              }),
+              isLoading
+                  ? CircularProgressIndicator()
+                  : BuildLoginButton(size, "Recuperer votre mot de passe",
+                      () async {
+                      if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        bool check = await AuthServices()
+                            .resetPassword("${emailController.text}");
+                        // future delayed pour attednre un peu de temps
+
+                        if (check) {
+                          Get.rawSnackbar(
+                            titleText: Text(
+                              "Tirage ISG",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            messageText: Text(
+                              "Consultez votre courrier électronique",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: Colors.green.withOpacity(0.5),
+                            borderRadius: 12,
+                            icon: Icon(Icons.done_all, color: Colors.white),
+                            margin: EdgeInsets.all(7),
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                        } else {
+                          Get.rawSnackbar(
+                            titleText: Text(
+                              "Tirage ISG",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            messageText: Text(
+                              "email  correspond  a aucune utilisateur ",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            backgroundColor: Colors.red.withOpacity(0.5),
+                            borderRadius: 12,
+                            icon: Icon(Icons.error, color: Colors.red),
+                            margin: EdgeInsets.all(7),
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+                        }
+                        // snackbar pour afficher un message
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                    }),
             ],
           ),
         ),

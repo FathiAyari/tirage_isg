@@ -34,7 +34,7 @@ class _CreateAccountState extends State<CreateAccount> {
   final _formKey = GlobalKey<FormState>();
   Widget SuffixPassword = Icon(Icons.visibility);
   bool obscureText = true;
-  Object val = "test";
+
   bool loading = false;
   File? _image;
   bool check = false;
@@ -44,9 +44,9 @@ class _CreateAccountState extends State<CreateAccount> {
     final image = await ImagePicker().pickImage(
       source: ImageSource.gallery,
     );
-    final imageTemporary = File(image!.path);
+
     setState(() {
-      _image = imageTemporary;
+      _image = File(image!.path);
       check = true;
     });
   }
@@ -130,33 +130,28 @@ class _CreateAccountState extends State<CreateAccount> {
                           size: size,
                           height: 0.02,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 60),
-                              child: check == false
-                                  ? Row(
-                                      children: const [
-                                        Text("Image pas encore selectionnée"),
-                                        Icon(
-                                          Icons.dangerous_outlined,
-                                          color: Colors.red,
-                                        )
-                                      ],
+                        Container(
+                          child: check == false
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Text("Image pas encore selectionnée"),
+                                    Icon(
+                                      Icons.dangerous_outlined,
+                                      color: Colors.red,
                                     )
-                                  : Row(
-                                      children: const [
-                                        Text("Image bien selectionnée"),
-                                        Icon(
-                                          Icons.done_all,
-                                          color: Colors.green,
-                                        )
-                                      ],
-                                    ),
-                            ),
-                          ],
+                                  ],
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Text("Image bien selectionnée"),
+                                    Icon(
+                                      Icons.done_all,
+                                      color: Colors.green,
+                                    )
+                                  ],
+                                ),
                         ),
                         DividerBox(
                           size: size,
@@ -195,7 +190,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                     : Colors.white,
                                 onPressed: () {
                                   setState(() {
-                                    this.obscureText = !obscureText;
+                                    obscureText = !obscureText;
                                   });
                                 },
                               ),
@@ -245,30 +240,45 @@ class _CreateAccountState extends State<CreateAccount> {
                                         setState(() {
                                           loading = true;
                                         });
-                                        var image = FirebaseStorage.instance
-                                            .ref(_image!.path);
+                                        var image = FirebaseStorage
+                                            .instance // instance
+                                            .ref(_image!
+                                                .path); //ref=> esm de fichier fel storage
                                         var task = image.putFile(_image!);
-                                        var imageurl = await (await task)
-                                            .ref
-                                            .getDownloadURL();
+                                        var imageUrl =
+                                            await (await task) // await 1: attendre l'upload d'image dans firestorage,2await: attendre la recuperation de lien getDownloadURL
+                                                .ref
+                                                .getDownloadURL();
                                         bool check = await AuthServices()
                                             .signUp(
                                                 emailController.text,
                                                 passwordController.text,
                                                 usernameController.text,
                                                 lastnameController.text,
-                                                imageurl.toString(),
+                                                imageUrl.toString(),
                                                 role);
-                                        alertTask(
-                                          lottieFile:
-                                              "assets/images/success.json",
-                                          action: "Connecter",
-                                          message:
-                                              "Votre compte a été créé avec succès",
-                                          press: () {
-                                            Get.to(() => SignIn());
-                                          },
-                                        ).show(context);
+                                        if (check) {
+                                          alertTask(
+                                            lottieFile:
+                                                "assets/images/success.json",
+                                            action: "Connecter",
+                                            message:
+                                                "Votre compte a été créé avec succès",
+                                            press: () {
+                                              Get.to(() => SignIn());
+                                            },
+                                          ).show(context);
+                                        } else {
+                                          alertTask(
+                                            lottieFile:
+                                                "assets/images/error.json",
+                                            action: "Ressayer",
+                                            message: "Email déja existe",
+                                            press: () {
+                                              Navigator.pop(context);
+                                            },
+                                          ).show(context);
+                                        }
                                       }
                                     } else {
                                       Get.rawSnackbar(

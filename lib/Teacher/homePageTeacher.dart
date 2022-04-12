@@ -18,6 +18,7 @@ class homePageTeacher extends StatefulWidget {
 
 class _homePageTeacherState extends State<homePageTeacher> {
   getMessage() {
+    print("het");
     FirebaseMessaging.onMessage.listen((message) {
       print(message.notification!.body);
       print(message.data);
@@ -68,6 +69,7 @@ class _homePageTeacherState extends State<homePageTeacher> {
 
   Container buildNavigationBar() {
     return Container(
+      color: Color(0xffe3eaef),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(

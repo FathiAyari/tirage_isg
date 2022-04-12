@@ -10,7 +10,7 @@ class emailFormField extends StatelessWidget {
 
   final Size size;
 
-  final IconData prefixIcon;
+  final IconData prefixIcon; // debut
 
   final TextEditingController controller;
 
@@ -23,7 +23,7 @@ class emailFormField extends StatelessWidget {
         child: TextFormField(
           validator: (value) {
             if (value!.isEmpty) {
-              // validation function
+              //fonction de  validation
 
               return ' cet champ est obligatoire ';
             } else if (!value.contains("@")) {
@@ -31,7 +31,7 @@ class emailFormField extends StatelessWidget {
             } else
               return null;
           },
-          keyboardType: TextInputType.emailAddress,
+          keyboardType: TextInputType.emailAddress, // type de clavier
           controller: controller,
           decoration: InputDecoration(
               prefixIcon: Icon(

@@ -7,7 +7,10 @@ class DbServices {
 
   saveUser(Cusers user) async {
     try {
-      await userCollection.doc(user.uid).set(user.Tojson());
+      // .set(json ) pour ajouter des champs dans une document
+      await userCollection
+          .doc(user.uid)
+          .set(user.Tojson()); // ajout d'utilisateur dans le document
     } catch (e) {}
   }
 }

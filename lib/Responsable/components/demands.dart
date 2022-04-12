@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
 
@@ -63,6 +64,24 @@ class _InProgressState extends State<Demands> {
     FlutterDownloader.registerCallback(downloadCallback);
   }
 
+  Future<String?> getDownloadPath() async {
+    Directory? directory;
+    try {
+      if (Platform.isIOS) {
+        directory = await getApplicationDocumentsDirectory();
+      } else {
+        directory = Directory('/storage/emulated/0/Download');
+        // Put file in global download folder, if for an unknown reason it didn't exist, we fallback
+        // ignore: avoid_slow_async_io
+        if (!await directory.exists())
+          directory = await getExternalStorageDirectory();
+      }
+    } catch (err, stack) {
+      print("Cannot get download folder path");
+    }
+    return directory?.path;
+  }
+
   @override
   void dispose() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
@@ -82,6 +101,7 @@ class _InProgressState extends State<Demands> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Color(0xffe3eaef),
       body: StreamBuilder<QuerySnapshot>(
         stream: dataSnapshot
             .collection("demands")
@@ -152,37 +172,58 @@ class _InProgressState extends State<Demands> {
                                       .get("url")
                                       .toString()
                                       .split("file_picker%2F")[1];
-                                  print(
-                                      "---${test.split("pdf")[0].replaceAll("%20", " ")}---");
+
                                   var status =
                                       await Permission.storage.request();
                                   if (status.isGranted) {
-                                    final baseStorage =
-                                        await getExternalStorageDirectory();
-                                    await FlutterDownloader.enqueue(
-                                      url:
-                                          '${snapshot.data!.docs[index].get("url")}',
-                                      fileName: test
+                                    Directory dir = Directory(
+                                        '/storage/emulated/0/Download');
+                                    /*final path = Directory(
+                                        "/storage/emulated/0/Download/test");
+                                    path.create();*/
+                                    bool check = await File(
+                                      "/storage/emulated/0/Download/" +
+                                          test
                                               .split("pdf")[0]
-                                              .replaceAll("%20", " ") +
+                                              .replaceAll("%20", "") +
                                           "pdf",
+                                    ).exists();
 
-                                      showNotification:
-                                          true, // show download progress in status bar (for Android)
-                                      openFileFromNotification: true,
-                                      savedDir: baseStorage!
-                                          .path, // click on notification to open downloaded file (for Android)
-                                    );
-                                    await snapshot.data!.docs[index].reference
-                                        .update({"state": 0});
-                                    Fluttertoast.showToast(
-                                      msg:
-                                          "Element telechargé et  ajouté à la liste d'attente",
-                                      backgroundColor: Colors.grey,
-                                      // fontSize: 25
-                                      // gravity: ToastGravity.TOP,
-                                      // textColor: Colors.pink
-                                    );
+                                    if (!check) {
+                                      await FlutterDownloader.enqueue(
+                                        url:
+                                            '${snapshot.data!.docs[index].get("url")}',
+                                        fileName: test
+                                                .split("pdf")[0]
+                                                .replaceAll("%20", "") +
+                                            "pdf",
+
+                                        showNotification:
+                                            true, // show download progress in status bar (for Android)
+                                        openFileFromNotification: true,
+                                        saveInPublicStorage: true,
+                                        savedDir: dir
+                                            .path, // click on notification to open downloaded file (for Android)
+                                      );
+                                      await snapshot.data!.docs[index].reference
+                                          .update({"state": 0});
+                                      Fluttertoast.showToast(
+                                        msg:
+                                            "Element telechargé et  ajouté à la liste d'attente",
+                                        backgroundColor: Colors.grey,
+                                        // fontSize: 25
+                                        // gravity: ToastGravity.TOP,
+                                        // textColor: Colors.pink
+                                      );
+                                    } else {
+                                      Fluttertoast.showToast(
+                                        msg: "fichier deja existe",
+                                        backgroundColor: Colors.grey,
+                                        // fontSize: 25
+                                        // gravity: ToastGravity.TOP,
+                                        // textColor: Colors.pink
+                                      );
+                                    }
                                   }
                                 },
                                 child: Stack(

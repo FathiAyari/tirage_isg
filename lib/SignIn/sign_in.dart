@@ -41,12 +41,12 @@ class _LoginState extends State<SignIn> {
             ),
           )),
     );
-  }
+  } // fermeture de l'application
 
   Widget Negative(BuildContext context) {
     return TextButton(
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.pop(context); // fermeture de dialog
         },
         child: Text(" Non"));
   }
@@ -80,6 +80,7 @@ class _LoginState extends State<SignIn> {
     FirebaseMessaging.instance.getToken().then((userToken) {
       setState(() {
         token = userToken!;
+        print(token);
       });
     });
   }
@@ -90,6 +91,7 @@ class _LoginState extends State<SignIn> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: WillPopScope(
+        // eviter le retour de button
         onWillPop: avoidReturnButton,
         child: SafeArea(
           child: Container(
@@ -179,10 +181,14 @@ class _LoginState extends State<SignIn> {
                               await FirebaseFirestore.instance
                                   .collection('users')
                                   .doc(uid)
-                                  .update({"token": token});
+                                  .update({
+                                "token": token
+                              }); // token pour la notification
                               if (UserData["role"] == "Responsable de tirage") {
+                                // test de role
                                 await controller.RememberResponsable(
-                                    Cusers.fromJson(UserData.data()));
+                                    Cusers.fromJson(UserData
+                                        .data())); //.data() pour recuperer le donneées de document
                                 Get.to(homePageResponsable());
                               } else {
                                 await controller.RememberTeacher(

@@ -22,23 +22,21 @@ class _SplasScreenState extends State<SplasScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     var auth = GetStorage().read("auth");
 
     var type_auth = GetStorage().read("type_auth");
     var resultSeen = GetStorage().read("seen");
     Timer(
         Duration(seconds: 4),
-        () => Get.to(
-              resultSeen == 1
-                  ? (auth == 1
-                      ? (type_auth == 1
-                          ? homePageResponsable()
-                          : homePageTeacher())
-                      : SignIn())
-                  : Onboarding(),
-            ));
+        () => Get.to(resultSeen == 1
+            ? (auth == 1
+                ? (type_auth == 1 ? homePageResponsable() : homePageTeacher())
+                : SignIn())
+            : Onboarding()));
   }
 
+// Get.to(esm el page eli theb temchilha)
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -86,3 +84,14 @@ class _SplasScreenState extends State<SplasScreen> {
         ));
   }
 }
+
+/*
+if(){
+  if 3adiya
+}else{}*/
+/*
+* inline if
+*
+* test==1?wa9t tkon condition valide  chniya ysir :wa9t el condition n'est pas valide
+*
+* */

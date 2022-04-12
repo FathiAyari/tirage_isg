@@ -34,6 +34,7 @@ class _homePageResponsableState extends State<homePageResponsable> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Color(0xffe3eaef),
         body: pages[currentIndex],
         bottomNavigationBar: Container(
             decoration: BoxDecoration(

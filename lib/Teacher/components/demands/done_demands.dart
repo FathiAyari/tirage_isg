@@ -33,6 +33,7 @@ class _DoneDemandsState extends State<DoneDemands> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Color(0xffe3eaef),
       body: StreamBuilder<QuerySnapshot>(
         stream: dataSnapshot
             .collection("demands")

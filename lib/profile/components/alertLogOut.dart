@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../SignIn/sign_in.dart';
 import '../../onboardingPage/remember_controller.dart';
@@ -14,6 +15,7 @@ class alertLogOut extends StatelessWidget {
 
   alertLogOut({required this.press});
   final controller = RememberController();
+  var user = GetStorage().read("user");
   show(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     showDialog(
@@ -70,7 +72,7 @@ class alertLogOut extends StatelessWidget {
                                     padding: EdgeInsets.all(15),
                                   ),
                                   onPressed: () {
-                                    controller.Logout();
+                                    controller.Logout(user["id"]);
                                     Get.to(() => SignIn());
                                   },
                                   child: Text("Confirmer")),
