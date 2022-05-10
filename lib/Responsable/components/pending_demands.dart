@@ -85,7 +85,7 @@ class _PendingdemandsState extends State<Pendingdemands> {
                         builder: (context, snapshotUserData) {
                           if (snapshotUserData.hasData) {
                             return Container(
-                              height: size.height * 0.15,
+                              height: size.height * 0.20,
                               decoration: BoxDecoration(
                                   color: Colors.amber.withOpacity(0.3),
                                   borderRadius: BorderRadius.circular(20)),

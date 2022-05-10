@@ -50,7 +50,7 @@ class _DoneDemandsState extends State<DoneDemands> {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      height: size.height * 0.15,
+                      height: size.height * 0.20,
                       decoration: BoxDecoration(
                           color: Colors.green.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(20)),

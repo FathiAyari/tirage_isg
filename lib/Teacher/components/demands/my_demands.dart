@@ -69,7 +69,7 @@ class _InProgressState extends State<My_demands> {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        height: size.height * 0.25,
+                        height: size.height * 0.20,
                         decoration: BoxDecoration(
                             color: Colors.red.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(20)),

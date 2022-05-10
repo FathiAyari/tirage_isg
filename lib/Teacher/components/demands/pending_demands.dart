@@ -51,7 +51,7 @@ class _PendingdemandsState extends State<Pendingdemands> {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      height: size.height * 0.15,
+                      height: size.height * 0.20,
                       decoration: BoxDecoration(
                           color: Colors.amber.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(20)),
