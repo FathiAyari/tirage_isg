@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -131,6 +132,24 @@ class _InProgressState extends State<Demands> {
                                 children: [
                                   Text(
                                     "Nom de document : ${snapshot.data!.docs[index].get("name")}",
+                                    style: TextStyle(
+                                      color: Colors.blueAccent,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Classe : ${snapshot.data!.docs[index].get("classe")}",
+                                    style: TextStyle(
+                                      color: Colors.blueAccent,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Nombre de copie : ${snapshot.data!.docs[index].get("number")}",
+                                    style: TextStyle(
+                                      color: Colors.blueAccent,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Date de tirage : ${DateFormat("yyyy-MM-dd").format(snapshot.data!.docs[index].get("date").toDate())}",
                                     style: TextStyle(
                                       color: Colors.blueAccent,
                                     ),

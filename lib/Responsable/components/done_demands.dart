@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 //responsable
 
 var dataSnapshot = FirebaseFirestore.instance;
@@ -46,6 +46,24 @@ class DoneDemands extends StatelessWidget {
                                   children: [
                                     Text(
                                       "Nom de document : ${snapshot.data!.docs[index].get("name")}",
+                                      style: TextStyle(
+                                        color: Colors.blueAccent,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Classe : ${snapshot.data!.docs[index].get("classe")}",
+                                      style: TextStyle(
+                                        color: Colors.blueAccent,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Nombre de copie : ${snapshot.data!.docs[index].get("number")}",
+                                      style: TextStyle(
+                                        color: Colors.blueAccent,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Date de tirage : ${DateFormat("yyyy-MM-dd").format(snapshot.data!.docs[index].get("date").toDate())}",
                                       style: TextStyle(
                                         color: Colors.blueAccent,
                                       ),

@@ -65,7 +65,7 @@ class _LoginState extends State<SignIn> {
     showDialog(
         context: context,
         builder: (context) {
-          return CupertinoAlertDialog(
+          return AlertDialog(
             content: Text(" êtes-vous sûr de sortir ?"),
             actions: [Negative(context), Positive()],
           );

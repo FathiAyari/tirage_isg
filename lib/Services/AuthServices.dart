@@ -16,9 +16,10 @@ class AuthServices {
       // await ma t5dem kan m3a el async
       await auth.signInWithEmailAndPassword(
           email: emailController, password: passwordController);
-
+      print("done");
       return true;
     } on FirebaseException catch (e) {
+      print(e.message);
       return false;
     }
   }

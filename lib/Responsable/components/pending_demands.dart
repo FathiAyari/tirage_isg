@@ -8,6 +8,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 //responsable
@@ -108,6 +109,24 @@ class _PendingdemandsState extends State<Pendingdemands> {
                                               children: [
                                                 Text(
                                                   "Nom de document : ${snapshot.data!.docs[index].get("name")}",
+                                                  style: TextStyle(
+                                                    color: Colors.blueAccent,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "Classe : ${snapshot.data!.docs[index].get("classe")}",
+                                                  style: TextStyle(
+                                                    color: Colors.blueAccent,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "Nombre de copie : ${snapshot.data!.docs[index].get("number")}",
+                                                  style: TextStyle(
+                                                    color: Colors.blueAccent,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "Date de tirage : ${DateFormat("yyyy-MM-dd").format(snapshot.data!.docs[index].get("date").toDate())}",
                                                   style: TextStyle(
                                                     color: Colors.blueAccent,
                                                   ),
