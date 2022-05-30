@@ -31,9 +31,7 @@ class _BodyState extends State<Body> {
                 clipBehavior: Clip.none,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20)),
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
                     child: Container(
                         width: double.infinity,
                         child: Image.asset(
@@ -63,16 +61,14 @@ class _BodyState extends State<Body> {
               children: [
                 Text(
                   StringUtils.capitalize(" ${user['name']}"),
-                  style: TextStyle(
-                      color: Colors.blueAccent, fontSize: size.height * 0.03),
+                  style: TextStyle(color: Colors.blueAccent, fontSize: size.height * 0.03),
                 ),
                 SizedBox(
                   width: size.width * 0.03,
                 ),
                 Text(
                   StringUtils.capitalize(" ${user['lastname']}"),
-                  style: TextStyle(
-                      color: Colors.blueAccent, fontSize: size.height * 0.03),
+                  style: TextStyle(color: Colors.blueAccent, fontSize: size.height * 0.03),
                 ),
               ],
             ),
@@ -92,7 +88,7 @@ class _BodyState extends State<Body> {
                 ).show(context);
               },
             ),
-            /*  GetBuilder<ThemeController>(
+            /*      GetBuilder<ThemeController>(
                 init: ThemeController(),
                 builder: (controller) {
                   return Padding(
@@ -101,8 +97,7 @@ class _BodyState extends State<Body> {
                       style: TextButton.styleFrom(
                         primary: Color(0xFFFF7643),
                         padding: EdgeInsets.all(20),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                         backgroundColor: Color(0xFFF5F6F9),
                       ),
                       onPressed: () {},
@@ -113,13 +108,10 @@ class _BodyState extends State<Body> {
                           Transform.scale(
                             scale: 1.8,
                             child: Switch(
-                                inactiveTrackColor:
-                                    Colors.amber.withOpacity(0.5),
-                                inactiveThumbImage:
-                                    AssetImage("assets/images/day.png"),
+                                inactiveTrackColor: Colors.amber.withOpacity(0.5),
+                                inactiveThumbImage: AssetImage("assets/images/day.png"),
                                 activeColor: Colors.black.withOpacity(0.1),
-                                activeThumbImage:
-                                    AssetImage("assets/images/night.png"),
+                                activeThumbImage: AssetImage("assets/images/night.png"),
                                 value: controller.isDark,
                                 onChanged: (value) {
                                   controller.updateTheme(value);

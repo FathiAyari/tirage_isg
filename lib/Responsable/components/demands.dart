@@ -36,10 +36,7 @@ class _InProgressState extends State<Demands> {
         },
         body: jsonEncode(
           <String, dynamic>{
-            'notification': <String, dynamic>{
-              "body": body.toString(),
-              'title': title.toString()
-            },
+            'notification': <String, dynamic>{"body": body.toString(), 'title': title.toString()},
             "priority": "high",
             "data": <String, dynamic>{
               'click_action': 'FLUTTER_NOTIFICATION_CLICK',
@@ -53,8 +50,7 @@ class _InProgressState extends State<Demands> {
   void initState() {
     super.initState();
 
-    IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
+    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
       String id = data[0];
       DownloadTaskStatus status = data[1];
@@ -74,8 +70,7 @@ class _InProgressState extends State<Demands> {
         directory = Directory('/storage/emulated/0/Download');
         // Put file in global download folder, if for an unknown reason it didn't exist, we fallback
         // ignore: avoid_slow_async_io
-        if (!await directory.exists())
-          directory = await getExternalStorageDirectory();
+        if (!await directory.exists()) directory = await getExternalStorageDirectory();
       }
     } catch (err, stack) {
       print("Cannot get download folder path");
@@ -89,10 +84,8 @@ class _InProgressState extends State<Demands> {
     super.dispose();
   }
 
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
-    final SendPort? send =
-        IsolateNameServer.lookupPortByName('downloader_send_port');
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+    final SendPort? send = IsolateNameServer.lookupPortByName('downloader_send_port');
 
     send!.send([id, status, progress]);
     Text("$progress");
@@ -104,11 +97,7 @@ class _InProgressState extends State<Demands> {
     return Scaffold(
       backgroundColor: Color(0xffe3eaef),
       body: StreamBuilder<QuerySnapshot>(
-        stream: dataSnapshot
-            .collection("demands")
-            .where("state", isEqualTo: -1)
-            .orderBy("time", descending: true)
-            .snapshots(),
+        stream: dataSnapshot.collection("demands").where("state", isEqualTo: -1).orderBy("time", descending: true).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
@@ -118,9 +107,7 @@ class _InProgressState extends State<Demands> {
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       height: size.height * 0.20,
-                      decoration: BoxDecoration(
-                          color: Colors.red.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(20)),
+                      decoration: BoxDecoration(color: Colors.red.withOpacity(0.3), borderRadius: BorderRadius.circular(20)),
                       child: ListTile(
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,10 +144,7 @@ class _InProgressState extends State<Demands> {
                                   StreamBuilder<QuerySnapshot>(
                                       stream: dataSnapshot
                                           .collection("users")
-                                          .where("uid",
-                                              isEqualTo: snapshot
-                                                  .data!.docs[index]
-                                                  .get("owner"))
+                                          .where("uid", isEqualTo: snapshot.data!.docs[index].get("owner"))
                                           .snapshots(),
                                       builder: (context, snapshotUserData) {
                                         if (snapshotUserData.hasData) {
@@ -180,55 +164,35 @@ class _InProgressState extends State<Demands> {
                             Container(
                               height: 60,
                               width: 60,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20)),
+                              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
                               child: InkWell(
                                 splashColor: Color(0xffe3eaef),
                                 highlightColor: Color(0xffe3eaef),
                                 onTap: () async {
-                                  var test = snapshot.data!.docs[index]
-                                      .get("url")
-                                      .toString()
-                                      .split("file_picker%2F")[1];
+                                  var test = snapshot.data!.docs[index].get("url").toString().split("file_picker%2F")[1];
 
-                                  var status =
-                                      await Permission.storage.request();
+                                  var status = await Permission.storage.request();
                                   if (status.isGranted) {
-                                    Directory dir = Directory(
-                                        '/storage/emulated/0/Download');
-                                    /*final path = Directory(
-                                        "/storage/emulated/0/Download/test");
-                                    path.create();*/
+                                    Directory dir = Directory('/storage/emulated/0/Download');
+                                    final path = Directory("/storage/emulated/0/Download/test");
+                                    path.create();
                                     bool check = await File(
-                                      "/storage/emulated/0/Download/" +
-                                          test
-                                              .split("pdf")[0]
-                                              .replaceAll("%20", "") +
-                                          "pdf",
+                                      "/storage/emulated/0/Download/" + test.split("pdf")[0].replaceAll("%20", "") + "pdf",
                                     ).exists();
 
                                     if (!check) {
                                       await FlutterDownloader.enqueue(
-                                        url:
-                                            '${snapshot.data!.docs[index].get("url")}',
-                                        fileName: test
-                                                .split("pdf")[0]
-                                                .replaceAll("%20", "") +
-                                            "pdf",
+                                        url: '${snapshot.data!.docs[index].get("url")}',
+                                        fileName: test.split("pdf")[0].replaceAll("%20", "") + "pdf",
 
-                                        showNotification:
-                                            true, // show download progress in status bar (for Android)
+                                        showNotification: true, // show download progress in status bar (for Android)
                                         openFileFromNotification: true,
                                         saveInPublicStorage: true,
-                                        savedDir: dir
-                                            .path, // click on notification to open downloaded file (for Android)
+                                        savedDir: dir.path, // click on notification to open downloaded file (for Android)
                                       );
-                                      await snapshot.data!.docs[index].reference
-                                          .update({"state": 0});
+                                      await snapshot.data!.docs[index].reference.update({"state": 0});
                                       Fluttertoast.showToast(
-                                        msg:
-                                            "Element telechargé et  ajouté à la liste d'attente",
+                                        msg: "Element telechargé et  ajouté à la liste d'attente",
                                         backgroundColor: Colors.grey,
                                         // fontSize: 25
                                         // gravity: ToastGravity.TOP,
